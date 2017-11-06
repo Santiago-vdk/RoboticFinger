@@ -1,25 +1,23 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <string>
 
 FILE * device;   //pointer for a file handled to driver
-
-void main(){
-	mov(1,0,"3200");
-}
-
-int mov(int motor, int direccion, char * steps){
+using namespace std;
+int mov(int motor, int direccion, int steps){
 
 	device = fopen("/dev/arduino","r+");
 	if(device != NULL){
 		if(direccion == 0) {
-			fprintf(device, "%s", "mov_m1_izq_" + steps + "\n");
+			
+
+			fprintf(device,  "mov_m1_izq_%d\n", steps);
 			fclose(device);
 			return 0;
 		}
 
-		fprintf(device, "%s", "mov_m1_izq_" + steps + "\n");
+		fprintf(device,  "mov_m1_der_%d\n", steps);
 		fclose(device);
 		return 0;	
 		
@@ -30,6 +28,15 @@ int mov(int motor, int direccion, char * steps){
 	}
 
 }
+
+int main(){
+	int i = mov(1,0,3200);
+	return i;
+}
+
+
+
+
 
 
 
