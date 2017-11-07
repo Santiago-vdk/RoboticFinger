@@ -39,13 +39,13 @@ class RoboticFingerParser ( Parser ):
     symbolicNames = [ "<INVALID>", "INT_NUMBER", "DIGIT", "TOUCH", "PUSH", 
                       "DRAG", "WHITESPACE", "NEWLINE" ]
 
-    RULE_chat = 0
+    RULE_roboticfinger = 0
     RULE_line = 1
     RULE_command = 2
     RULE_positionX = 3
     RULE_positionY = 4
 
-    ruleNames =  [ "chat", "line", "command", "positionX", "positionY" ]
+    ruleNames =  [ "roboticfinger", "line", "command", "positionX", "positionY" ]
 
     EOF = Token.EOF
     INT_NUMBER=1
@@ -64,7 +64,7 @@ class RoboticFingerParser ( Parser ):
 
 
 
-    class ChatContext(ParserRuleContext):
+    class RoboticfingerContext(ParserRuleContext):
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -81,23 +81,23 @@ class RoboticFingerParser ( Parser ):
 
 
         def getRuleIndex(self):
-            return RoboticFingerParser.RULE_chat
+            return RoboticFingerParser.RULE_roboticfinger
 
         def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterChat" ):
-                listener.enterChat(self)
+            if hasattr( listener, "enterRoboticfinger" ):
+                listener.enterRoboticfinger(self)
 
         def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitChat" ):
-                listener.exitChat(self)
+            if hasattr( listener, "exitRoboticfinger" ):
+                listener.exitRoboticfinger(self)
 
 
 
 
-    def chat(self):
+    def roboticfinger(self):
 
-        localctx = RoboticFingerParser.ChatContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 0, self.RULE_chat)
+        localctx = RoboticFingerParser.RoboticfingerContext(self, self._ctx, self.state)
+        self.enterRule(localctx, 0, self.RULE_roboticfinger)
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)

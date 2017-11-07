@@ -6,7 +6,7 @@ grammar RoboticFinger;
  * Parser Rules
  */
 
-chat                : line+ EOF ;
+roboticfinger                : line+ EOF ;
 
 line		    : command positionX positionY NEWLINE ;
 
@@ -47,7 +47,7 @@ PUSH                : P U S H ;
 
 DRAG		    : D R A G ;	
 
-WHITESPACE          : (' ' | '\t')+ ;
+WHITESPACE          : (' ');
 
 NEWLINE             : ('\r'? '\n' | '\r')+ ;
 

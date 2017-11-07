@@ -1,13 +1,13 @@
 PROG = lib
 CC = g++
 CPPFLAGS = -g -Wall 
-OBJS = lib.o
+OBJS = lib.so
 
-$(PROG) : $(OBJS)
-	$(CC) -o $(PROG) $(OBJS)
+#$(PROG) : $(OBJS)
+#	$(CC) -o $(PROG) $(OBJS)
 
 all:	
-	g++ -Wall  -c -o lib.o lib.cpp
+	g++ -Wall -fPIC -O3 -shared lib.cpp -o lib.so
 
 clean:
 	rm -f core $(PROG) $(OBJS)

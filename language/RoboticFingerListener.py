@@ -8,12 +8,12 @@ else:
 # This class defines a complete listener for a parse tree produced by RoboticFingerParser.
 class RoboticFingerListener(ParseTreeListener):
 
-    # Enter a parse tree produced by RoboticFingerParser#chat.
-    def enterChat(self, ctx:RoboticFingerParser.ChatContext):
+    # Enter a parse tree produced by RoboticFingerParser#roboticfinger.
+    def enterRoboticfinger(self, ctx:RoboticFingerParser.RoboticfingerContext):
         pass
 
-    # Exit a parse tree produced by RoboticFingerParser#chat.
-    def exitChat(self, ctx:RoboticFingerParser.ChatContext):
+    # Exit a parse tree produced by RoboticFingerParser#roboticfinger.
+    def exitRoboticfinger(self, ctx:RoboticFingerParser.RoboticfingerContext):
         pass
 
 

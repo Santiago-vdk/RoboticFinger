@@ -28,6 +28,10 @@
 FILE * device;   //Puntero al archivo que controla Arduino
 using namespace std;
 
+extern "C" 
+{
+  
+
 
 /*
 	Metodo encargado de hacer la llamada para el movimiento de los servos en X o Y.
@@ -70,7 +74,7 @@ int main(){
 	return i;
 }
 
-
+}
 
 
 
