@@ -52,8 +52,8 @@ Mkfile.old
 dkms.conf
 
 
-language/__pycache__/*.pyc
-language/__pycache__/*.pyo
+*.pyc
+*.pyo
 
-*.cpython-35.pyc
+*.pyc
 
