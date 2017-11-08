@@ -59,12 +59,17 @@ def main(argv):
                 print("Ejecutando TOUCH")
                 if(ctypes.CDLL(root_path + '/library/lib.so').mov(0,0,int(command[2])) < 0):
                     print("Error ejecutando comando TOUCH")
+
             elif(command[0] == "PUSH"):
                 print("Ejecutando PUSH")
                 if(ctypes.CDLL(root_path + '/library/lib.so').mov(0,1,int(command[2])) < 0):
                     print("Error ejecutando comando PUSH")
-            else:
-                print("Comando desconocido, esto nunca deberia llamarse")
+
+            elif(command[0] == "DRAG"):
+                print("Ejecutando DRAG")
+                if(ctypes.CDLL(root_path + '/library/lib.so').mov(0,1,int(command[2])) < 0):
+                    print("Error ejecutando comando PUSH")
+            
         
     
  
