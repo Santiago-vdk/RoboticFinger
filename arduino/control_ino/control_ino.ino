@@ -35,20 +35,20 @@ void loop()
         Serial.print("Arduino Received: ");
         Serial.print(inData);
 
-        
+
         String operacion = inData.substring(0, inData.indexOf('_'));
         inData = inData.substring(inData.indexOf('_') + 1, inData.length());
         
-        String motor = inData.substring(0, inData.indexOf('_'));
+        /*String motor = inData.substring(0, inData.indexOf('_'));
         inData = inData.substring(inData.indexOf('_') + 1, inData.length());
         
         String direccion = inData.substring(0, inData.indexOf('_'));
-        inData = inData.substring(inData.indexOf('_') + 1, inData.length());
+        inData = inData.substring(inData.indexOf('_') + 1, inData.length());*/
         
         String steps = inData.substring(0, inData.indexOf('_'));
         
         
-        if(operacion == "mov"  & motor == "m1" & direccion == "izq" & steps.length() > 0){
+        if(operacion == "000" & steps.length() > 0){
           Serial.print("Rotando M1 hacia la izquierda\n");
           
           digitalWrite(motor1_enable_pin, LOW);
@@ -60,13 +60,13 @@ void loop()
           {
             digitalWrite(motor1_step_pin, LOW);  // This LOW to HIGH change is what creates the
             digitalWrite(motor1_step_pin, HIGH); // "Rising Edge" so the easydriver knows to when to step.
-            delayMicroseconds(500);      // This delay time is close to top speed for this
+            delayMicroseconds(150);      // This delay time is close to top speed for this
           }
           
           digitalWrite(motor1_enable_pin, HIGH);  
           
           
-        } else if(operacion == "mov"  & motor == "m1" & direccion == "der" & steps.length() > 0){
+        } else if(operacion == "001" & steps.length() > 0){
           Serial.print("Rotando M1 hacia la derecha\n");
           
           digitalWrite(motor1_enable_pin, LOW);
@@ -79,7 +79,7 @@ void loop()
           {
             digitalWrite(motor1_step_pin, LOW);  // This LOW to HIGH change is what creates the
             digitalWrite(motor1_step_pin, HIGH); // "Rising Edge" so the easydriver knows to when to step.
-            delayMicroseconds(500);      // This delay time is close to top speed for this
+            delayMicroseconds(150);      // This delay time is close to top speed for this
           }
           
           digitalWrite(motor1_enable_pin, HIGH);  
@@ -94,3 +94,4 @@ void loop()
     
   }
 }
+

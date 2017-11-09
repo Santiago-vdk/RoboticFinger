@@ -2,19 +2,9 @@ import sys, os
 import ctypes
 import re
 
-
 root_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', ''))
 language_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'language'))
 sys.path.insert(0, language_path)
-
-
-def main():
-        TestLib = ctypes.cdll.LoadLibrary(root_path + '/library/lib.o')
-        print(TestLib.hello())
-
-
-
-
 
 from antlr4 import *
 from RoboticFingerLexer import RoboticFingerLexer
@@ -29,12 +19,173 @@ class MyErrorListener( ErrorListener ):
         sys.exit()
 
 
+
+def dijkstra(graph,src,dest,visited=[],distances={},predecessors={}):
+    """ calculates a shortest path tree routed in src
+    """
+    # a few sanity checks
+    if src not in graph:
+        raise TypeError('The root of the shortest path tree cannot be found')
+
+    if dest not in graph:
+        raise TypeError('The target of the shortest path cannot be found')
+
+    # ending condition
+    if src == dest:
+        # We build the shortest path and display it
+        path=[]
+        pred=dest
+        while pred != None:
+            path.append(pred)
+            pred=predecessors.get(pred,None)
+
+        #print('shortest path: '+str(path)+" cost="+str(distances[dest]))
+        return path
+
+    else :
+        # if it is the initial  run, initializes the cost
+        if not visited:
+            distances[src]=0
+        # visit the neighbors
+        for neighbor in graph[src] :
+            if neighbor not in visited:
+                new_distance = distances[src] + graph[src][neighbor]
+                if new_distance < distances.get(neighbor,float('inf')):
+                    distances[neighbor] = new_distance
+                    predecessors[neighbor] = src
+        # mark as visited
+        visited.append(src)
+        # now that all neighbors have been visited: recurse
+        # select the non visited node with lowest distance 'x'
+        # run Dijskstra with src='x'
+        unvisited={}
+        for k in graph:
+            if k not in visited:
+                unvisited[k] = distances.get(k,float('inf'))
+        x=min(unvisited, key=unvisited.get)
+        #dijkstra(graph,x,dest,visited,distances,predecessors)
+        return dijkstra(graph, x, dest, visited, distances, predecessors)
+
+
+
+
+
+teclado =  [[7,8,9],    # Se utiliza para manejar el posicionamiento global del dedo
+            [4,5,6],
+            [1,2,3],
+            [0,0,0]]
+
+graph = {'7': {'8': 1, '4': 1},
+         '8': {'7': 1, '5': 1, '9':1},
+         '9': {'8': 1, '6':1,},
+         '4': {'7': 1, '5': 1, '1': 1},
+         '5': {'8': 1, '4': 1, '6': 1, '2':1},
+         '6': {'9': 1, '5': 1, '3': 1},
+         '1': {'4': 1, '2': 1, '0': 1},
+         '2': {'5': 1, '1': 1, '3': 1},
+         '3': {'2': 1, '6': 1}}
+        # '0': {'1': 1}
+
+path = dijkstra(graph,'7','3')
+path = path[::-1]
+print(path)
+
+i = 0
+j = 0
+k = 1
+print(int(path[-1]))
+
+camino = []
+
+while(teclado[i][j] != int(path[-1])):                  # Arreglo de tuplas, cada tupla tiene (X|Y,IZQ|DER,STEPS)
+    moved = False
+    if(not moved and j+1<len(teclado[i])):
+        if(teclado[i][j+1] == int(path[k])):
+            print("Derecha")
+            k += 1
+            j += 1
+            moved = True
+
+
+    if(not moved and j-1 >= 0):
+        if(teclado[i][j-1] == int(path[k])):
+            print("Izquierda")
+            k += 1
+            j -= 1
+            moved = True
+
+    if(not moved and i+1<len(teclado)):
+        if(teclado[i+1][j] == int(path[k])):
+            print("Abajo")
+            k += 1
+            i += 1
+            moved = True
+
+    if(not moved and i-1 >= 0):
+        if(teclado[i-1][j] == int(path[k])):
+            print("Arriba")
+            k += 1
+            i -= 1
+            moved = True
+
+    if(not moved):
+        print("Camino no encontrado")
+
+
+pos_inicial = (0,0)     # Posicion inicial para el inicio de la ejecucion
+pos_actual = (0,0)    # Posicion actual en la que se encuentra el dedo
+tamanio = -1            # Tamaño del teclado a manejar
+
+
+
+def seleccionar_teclado(tamanio):
+    if(tamanio == "SMALL"):
+        tamanio = 2
+        print("Teclado definido: SMALL")
+    elif(tamanio == "MEDIUM"):
+        tamanio = 3
+        print("Teclado definido: MEDIUM")
+    elif(tamanio == "LARGE"):
+        tamanio = 5
+        print("Teclado definido: LARGE")
+    else:
+        print("Error inesperado seleccionando teclado!")
+        sys.exit()
+
+def calcular_trayectoria(posI,posJ):
+    print("")
+    #trayectoria = []                                        # Arreglo de tuplas, cada tupla tiene (X|Y,IZQ|DER,STEPS)
+    #while(True):  # (MOTOR A MOVER, DIRECCION EN QUE MOVERLO, CANTIDAD DE STEPS QUE LO MUEVO)
+    #    if(posI == pos_actual(0) and posJ == pos_actual(1)):
+    #        break
+    #    else:
+    #        if(posI == teclado[pos_actual(0)][pos_actual(1)])
+
+
+def find_path(graph, start, end, path=[]):
+    path = path + [start]
+    if start == end:
+        return path
+    if not graph.has_key(start):
+        return None
+    for node in graph[start]:
+        if node not in path:
+            newpath = find_path(graph, node, end, path)
+            if newpath: return newpath
+    return None
+
+
 def main(argv):
+
+    if len(argv) < 3:
+        print("Favor especificar archivo de configuracion y un tamaño SMALL | MEDIUM | LARGE")
+        sys.exit()
+
     input = FileStream(argv[1])
     lexer = RoboticFingerLexer(input)
 
     lexer.removeErrorListeners()
-    lexer._listeners = [ MyErrorListener() ] 
+    lexer._listeners = [ MyErrorListener() ]
 
     stream = CommonTokenStream(lexer)
     parser = RoboticFingerParser(stream)
@@ -46,32 +197,50 @@ def main(argv):
     walker = ParseTreeWalker()
     walker.walk(listen, tree)
 
-    print("Ejecutando secuencia...\n")
+    tam_teclado = argv[2]
+    if(tam_teclado == "small" or tam_teclado == "SMALL"):
+        seleccionar_teclado("SMALL")
+    elif(tam_teclado == "medium" or tam_teclado == "MEDIUM"):
+        seleccionar_teclado("MEDIUM")
+    elif(tam_teclado == "large" or tam_teclado == "LARGE"):
+        seleccionar_teclado("LARGE")
+    else:
+        print("Tamaño de teclado indefinido (SMALL | MEDIUM | LARGE)")
+        sys.exit()
 
+    print("Ejecutando secuencia...\n")
     with open(root_path + "/configuration") as fp:
         for line in fp:
-            
-            
-           
+
             command = line.split(' ')
 
-            if(command[0] == "TOUCH"):
-                print("Ejecutando TOUCH")
+            if(command[0] == "DRAG"):
+                print("Ejecutando DRAG")
+
+                #trayectoria = calcular_trayectoria(command[1],command[2])
+
+
                 if(ctypes.CDLL(root_path + '/library/lib.so').mov(0,0,int(command[2])) < 0):
-                    print("Error ejecutando comando TOUCH")
+                    print("Error ejecutando instruccion DRAG")
+                    sys.exit()
+
 
             elif(command[0] == "PUSH"):
                 print("Ejecutando PUSH")
                 if(ctypes.CDLL(root_path + '/library/lib.so').mov(0,1,int(command[2])) < 0):
-                    print("Error ejecutando comando PUSH")
+                    print("Error ejecutando instruccion PUSH")
+                    sys.exit()
 
-            elif(command[0] == "DRAG"):
-                print("Ejecutando DRAG")
+            elif(command[0] == "TOUCH"):
+                print("Ejecutando TOUCH")
                 if(ctypes.CDLL(root_path + '/library/lib.so').mov(0,1,int(command[2])) < 0):
-                    print("Error ejecutando comando PUSH")
-            
-        
-    
- 
+                    print("Error ejecutando instruccion TOUCH")
+                    sys.exit()
+            else:
+                print("Error inesperado detectando instrucciones!")
+                sys.exit()
+
+
+
 if __name__ == '__main__':
     main(sys.argv)

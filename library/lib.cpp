@@ -40,12 +40,12 @@ int mov(int motor, int direccion, int steps){
 	device = fopen("/dev/arduino","r+");
 	if(device != NULL){
 		if(direccion == 0) {
-			fprintf(device,  "mov_m1_izq_%d\n", steps);
+			fprintf(device,  "000_%d\n", steps);
 			fclose(device);
 			return 0;
 		}
 
-		fprintf(device,  "mov_m1_der_%d\n", steps);
+		fprintf(device,  "001_%d\n", steps);
 		fclose(device);
 		return 0;	
 		
