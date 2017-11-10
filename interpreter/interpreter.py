@@ -63,12 +63,12 @@ def dijkstra(graph,src,dest,visited=[],distances={},predecessors={}):
         for k in graph:
             if k not in visited:
                 unvisited[k] = distances.get(k,float('inf'))
+
         x=min(unvisited, key=unvisited.get)
+        #print(unvisited)
+        #print("min " + str(x))
         #dijkstra(graph,x,dest,visited,distances,predecessors)
         return dijkstra(graph, x, dest, visited, distances, predecessors)
-
-
-
 
 
 teclado =  [[7,8,9],    # Se utiliza para manejar el posicionamiento global del dedo
@@ -87,8 +87,7 @@ graph = {'7': {'8': 1, '4': 1},
          '3': {'2': 1, '6': 1},
          '0': {'1': 1}}
 
-dijkstra(graph,'7','8')
-dijkstra(graph,'4','8')
+
 
 #print("----------------------------------------")
 
@@ -202,7 +201,9 @@ def main(argv):
                 print("Desde " + str(desde) + ", Hasta " + str(hasta))
                 if(desde != hasta):
 
-                    path = dijkstra(graph,str(desde),str(hasta))
+
+
+                    path = dijkstra(graph,str(desde),str(hasta),[],{},{})
                     path = path[::-1]
 
                     print("Camino a seguir: " + str(path))
@@ -213,6 +214,8 @@ def main(argv):
                         if(ctypes.CDLL(root_path + '/library/lib.so').drag(instruccion[0],instruccion[1],instruccion[2]) < 0):
                             print("Error ejecutando instruccion DRAG")
                             #sys.exit()
+
+
                 else:
                     print("DRAG IGNORADO")
 
