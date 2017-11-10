@@ -8,13 +8,19 @@ grammar RoboticFinger;
 
 roboticfinger                : line+ EOF ;
 
-line		    : command positionX positionY NEWLINE ;
+line		    : drag_command positionX positionY NEWLINE | push_cmd time NEWLINE | touch_cmd NEWLINE;
 
-command              : (TOUCH | PUSH | DRAG) WHITESPACE ;
-                                        
+drag_command              : DRAG WHITESPACE ;
+
+push_cmd  : PUSH WHITESPACE ;
+
+touch_cmd : TOUCH  ;
+
 positionX	      : INT_NUMBER+ WHITESPACE;
 
 positionY 	      :   INT_NUMBER+;
+
+time              : INT_NUMBER+;
 
 INT_NUMBER		:   DIGIT+;
 
@@ -45,10 +51,8 @@ TOUCH               : T O U C H ;
 
 PUSH                : P U S H ;
 
-DRAG		    : D R A G ;	
+DRAG		    : D R A G ;
 
 WHITESPACE          : (' ');
 
 NEWLINE             : ('\r'? '\n' | '\r')+ ;
-
-

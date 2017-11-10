@@ -49,52 +49,52 @@ int drag(int motor, int direccion, int steps){
 
 	}
 	else{
-		printf("File no found\n");
+		printf("Lib: Error al comunicarse con driver\n");
 		return -1;
 	}
 }
 
 
-/*
-	Metodo encargado de hacer la llamada para tocar la pantalla durante un determinado tiempo.
-*/
-int push(int tiempo){
-  device = fopen("/dev/arduino","r+");
-	if(device != NULL){
-		fprintf(device,  "100_%d\n", tiempo);
-		fclose(device);
-		return 0;
-	}
-	else{
-		printf("File no found\n");
-		return -1;
-	}
-}
+  /*
+  	Metodo encargado de hacer la llamada para tocar la pantalla durante un determinado tiempo.
+  */
+  int push(int tiempo){
+    device = fopen("/dev/arduino","r+");
+  	if(device != NULL){
+  		fprintf(device,  "100_%d\n", tiempo);
+  		fclose(device);
+  		return 0;
+  	}
+  	else{
+  		printf("Lib: Error al comunicarse con driver\n");
+  		return -1;
+  	}
+  }
 
-/*
-	Metodo encargado de hacer la llamada para tocar la pantalla e inmediatamente subir el dedo.
-*/
-int touch(){
-  device = fopen("/dev/arduino","r+");
-	if(device != NULL){
-		fprintf(device,  "200_%d\n",0);
-		fclose(device);
-		return 0;
-	}
-	else{
-		printf("File no found\n");
-		return -1;
-	}
-}
+  /*
+  	Metodo encargado de hacer la llamada para tocar la pantalla e inmediatamente subir el dedo.
+  */
+  int touch(){
+    device = fopen("/dev/arduino","r+");
+  	if(device != NULL){
+  		fprintf(device,  "200_%d\n",0);
+  		fclose(device);
+  		return 0;
+  	}
+  	else{
+  		printf("Lib: Error al comunicarse con driver\n");
+  		return -1;
+  	}
+  }
 
-int main(){
-	int i = drag(1,0,3200);
-	drag(1,1,3000);
-	drag(1,1,5000);
-	drag(1,0,200);
-	drag(1,1,1000);
+  int main(){
+  	int i = drag(1,0,3200);
+  	drag(1,1,3000);
+  	drag(1,1,5000);
+  	drag(1,0,200);
+  	drag(1,1,1000);
 
-	return i;
-}
+  	return i;
+  }
 
 }

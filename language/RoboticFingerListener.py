@@ -26,12 +26,30 @@ class RoboticFingerListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by RoboticFingerParser#command.
-    def enterCommand(self, ctx:RoboticFingerParser.CommandContext):
+    # Enter a parse tree produced by RoboticFingerParser#drag_command.
+    def enterDrag_command(self, ctx:RoboticFingerParser.Drag_commandContext):
         pass
 
-    # Exit a parse tree produced by RoboticFingerParser#command.
-    def exitCommand(self, ctx:RoboticFingerParser.CommandContext):
+    # Exit a parse tree produced by RoboticFingerParser#drag_command.
+    def exitDrag_command(self, ctx:RoboticFingerParser.Drag_commandContext):
+        pass
+
+
+    # Enter a parse tree produced by RoboticFingerParser#push_cmd.
+    def enterPush_cmd(self, ctx:RoboticFingerParser.Push_cmdContext):
+        pass
+
+    # Exit a parse tree produced by RoboticFingerParser#push_cmd.
+    def exitPush_cmd(self, ctx:RoboticFingerParser.Push_cmdContext):
+        pass
+
+
+    # Enter a parse tree produced by RoboticFingerParser#touch_cmd.
+    def enterTouch_cmd(self, ctx:RoboticFingerParser.Touch_cmdContext):
+        pass
+
+    # Exit a parse tree produced by RoboticFingerParser#touch_cmd.
+    def exitTouch_cmd(self, ctx:RoboticFingerParser.Touch_cmdContext):
         pass
 
 
@@ -50,6 +68,15 @@ class RoboticFingerListener(ParseTreeListener):
 
     # Exit a parse tree produced by RoboticFingerParser#positionY.
     def exitPositionY(self, ctx:RoboticFingerParser.PositionYContext):
+        pass
+
+
+    # Enter a parse tree produced by RoboticFingerParser#time.
+    def enterTime(self, ctx:RoboticFingerParser.TimeContext):
+        pass
+
+    # Exit a parse tree produced by RoboticFingerParser#time.
+    def exitTime(self, ctx:RoboticFingerParser.TimeContext):
         pass
 
 
