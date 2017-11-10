@@ -141,23 +141,31 @@ pos_actual = [0,0]
 def seleccionar_teclado(tamanio):
     if(tamanio == "SMALL"):
         tamanio = 2
-        print("Teclado definido: SMALL")
+        print(bcolors.HEADER + "Teclado definido: SMALL" + bcolors.ENDC)
     elif(tamanio == "MEDIUM"):
         tamanio = 3
-        print("Teclado definido: MEDIUM")
+        print(bcolors.HEADER + "Teclado definido: MEDIUM"+ bcolors.ENDC)
     elif(tamanio == "LARGE"):
         tamanio = 5
-        print("Teclado definido: LARGE")
+        print(bcolors.HEADER + "Teclado definido: LARGE"+ bcolors.ENDC)
     else:
-        print("Error inesperado seleccionando teclado!")
+        print(bcolors.FAIL + "Error inesperado seleccionando teclado!" + bcolors.ENDC)
         sys.exit()
 
-
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
 
 def main(argv):
 
     if len(argv) < 3:
-        print("Favor especificar archivo de configuracion y un tamaño SMALL | MEDIUM | LARGE")
+        print(bcolors.FAIL + "Favor especificar archivo de configuracion y un tamaño SMALL | MEDIUM | LARGE" + bcolors.ENDC)
         sys.exit()
 
     # Etapa de parseo y revision de sintaxis
@@ -187,11 +195,11 @@ def main(argv):
     elif(tam_teclado == "large" or tam_teclado == "LARGE"):
         seleccionar_teclado("LARGE")
     else:
-        print("Tamaño de teclado indefinido (SMALL | MEDIUM | LARGE)")
+        print(bcolors.FAIL + "Tamaño de teclado indefinido (SMALL | MEDIUM | LARGE)"  + bcolors.ENDC)
         sys.exit()
 
     # Inicio de la secuencia
-    print("Ejecutando secuencia...\n")
+    print(bcolors.OKGREEN + "Ejecutando secuencia...\n" + bcolors.ENDC)
     with open(root_path + "/configuration") as fp:  # Se lee la configuracion previamente validada sintacticamente
         for line in fp:
             line = line.rstrip()        # Removemos el \n del archivo
