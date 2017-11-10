@@ -21,6 +21,7 @@ class MyErrorListener( ErrorListener ):
 
 
 def dijkstra(graph,src,dest,visited=[],distances={},predecessors={}):
+
     """ calculates a shortest path tree routed in src
     """
     # a few sanity checks
@@ -73,7 +74,7 @@ def dijkstra(graph,src,dest,visited=[],distances={},predecessors={}):
 teclado =  [[7,8,9],    # Se utiliza para manejar el posicionamiento global del dedo
             [4,5,6],
             [1,2,3],
-            [0,0,0]]
+            [0,-1,-1]]
 
 graph = {'7': {'8': 1, '4': 1},
          '8': {'7': 1, '5': 1, '9':1},
@@ -83,60 +84,60 @@ graph = {'7': {'8': 1, '4': 1},
          '6': {'9': 1, '5': 1, '3': 1},
          '1': {'4': 1, '2': 1, '0': 1},
          '2': {'5': 1, '1': 1, '3': 1},
-         '3': {'2': 1, '6': 1}}
-        # '0': {'1': 1}
+         '3': {'2': 1, '6': 1},
+         '0': {'1': 1}}
 
-path = dijkstra(graph,'7','3')
-path = path[::-1]
-print(path)
+dijkstra(graph,'7','8')
+dijkstra(graph,'4','8')
 
-i = 0
-j = 0
-k = 1
-print(int(path[-1]))
+#print("----------------------------------------")
 
-camino = []
+def calcular_trayectoria(path):
+    i = 0
+    j = 0
+    k = 1
+    camino = []
+    while(teclado[i][j] != int(path[-1])):                  # Arreglo de tuplas, cada tupla tiene (X|Y,IZQ|DER,STEPS)
+        moved = False                                       # X->M0 = 0. Y->M1 = 1, IZQ = 0, DER = 1, STEPS(calculados)
+        if(not moved and j+1<len(teclado[i])):
+            if(teclado[i][j+1] == int(path[k])):
+                #print("Derecha")
+                instruccion = (1,1,3200)
+                camino.append(instruccion)
+                k += 1
+                j += 1
+                moved = True
+        if(not moved and j-1 >= 0):
+            if(teclado[i][j-1] == int(path[k])):
+                #print("Izquierda")
+                instruccion = (1,1,3200)
+                camino.append(instruccion)
+                k += 1
+                j -= 1
+                moved = True
+        if(not moved and i+1<len(teclado)):
+            if(teclado[i+1][j] == int(path[k])):
+                #print("Abajo")
+                instruccion = (1,1,3200)
+                camino.append(instruccion)
+                k += 1
+                i += 1
+                moved = True
+        if(not moved and i-1 >= 0):
+            if(teclado[i-1][j] == int(path[k])):
+                #print("Arriba")
+                instruccion = (1,1,3200)
+                camino.append(instruccion)
+                k += 1
+                i -= 1
+                moved = True
 
-while(teclado[i][j] != int(path[-1])):                  # Arreglo de tuplas, cada tupla tiene (X|Y,IZQ|DER,STEPS)
-    moved = False
-    if(not moved and j+1<len(teclado[i])):
-        if(teclado[i][j+1] == int(path[k])):
-            print("Derecha")
-            k += 1
-            j += 1
-            moved = True
+        if(not moved):
+            print("Camino no encontrado")
+    return camino   # Devuelvo la equivalencia en instrucciones de la Biblioteca
 
-
-    if(not moved and j-1 >= 0):
-        if(teclado[i][j-1] == int(path[k])):
-            print("Izquierda")
-            k += 1
-            j -= 1
-            moved = True
-
-    if(not moved and i+1<len(teclado)):
-        if(teclado[i+1][j] == int(path[k])):
-            print("Abajo")
-            k += 1
-            i += 1
-            moved = True
-
-    if(not moved and i-1 >= 0):
-        if(teclado[i-1][j] == int(path[k])):
-            print("Arriba")
-            k += 1
-            i -= 1
-            moved = True
-
-    if(not moved):
-        print("Camino no encontrado")
-
-
-pos_inicial = (0,0)     # Posicion inicial para el inicio de la ejecucion
-pos_actual = (0,0)    # Posicion actual en la que se encuentra el dedo
 tamanio = -1            # Tamaño del teclado a manejar
-
-
+pos_actual = (0,0)
 
 def seleccionar_teclado(tamanio):
     if(tamanio == "SMALL"):
@@ -152,27 +153,6 @@ def seleccionar_teclado(tamanio):
         print("Error inesperado seleccionando teclado!")
         sys.exit()
 
-def calcular_trayectoria(posI,posJ):
-    print("")
-    #trayectoria = []                                        # Arreglo de tuplas, cada tupla tiene (X|Y,IZQ|DER,STEPS)
-    #while(True):  # (MOTOR A MOVER, DIRECCION EN QUE MOVERLO, CANTIDAD DE STEPS QUE LO MUEVO)
-    #    if(posI == pos_actual(0) and posJ == pos_actual(1)):
-    #        break
-    #    else:
-    #        if(posI == teclado[pos_actual(0)][pos_actual(1)])
-
-
-def find_path(graph, start, end, path=[]):
-    path = path + [start]
-    if start == end:
-        return path
-    if not graph.has_key(start):
-        return None
-    for node in graph[start]:
-        if node not in path:
-            newpath = find_path(graph, node, end, path)
-            if newpath: return newpath
-    return None
 
 
 def main(argv):
@@ -217,25 +197,36 @@ def main(argv):
             if(command[0] == "DRAG"):
                 print("Ejecutando DRAG")
 
-                #trayectoria = calcular_trayectoria(command[1],command[2])
+                desde = teclado[ pos_actual[0] ][ pos_actual[1] ]
+                hasta = teclado[ int(command[1]) ][ int(command[2]) ]
+                print("Desde " + str(desde) + ", Hasta " + str(hasta))
+                if(desde != hasta):
 
+                    path = dijkstra(graph,str(desde),str(hasta))
+                    path = path[::-1]
 
-                if(ctypes.CDLL(root_path + '/library/lib.so').mov(0,0,int(command[2])) < 0):
-                    print("Error ejecutando instruccion DRAG")
-                    sys.exit()
+                    print("Camino a seguir: " + str(path))
+                    instrucciones = calcular_trayectoria(path)
 
+                    for instruccion in instrucciones:                   # Arreglo de tuplas, cada tupla tiene (X|Y,IZQ|DER,STEPS)
+
+                        if(ctypes.CDLL(root_path + '/library/lib.so').drag(instruccion[0],instruccion[1],instruccion[2]) < 0):
+                            print("Error ejecutando instruccion DRAG")
+                            #sys.exit()
+                else:
+                    print("DRAG IGNORADO")
 
             elif(command[0] == "PUSH"):
                 print("Ejecutando PUSH")
-                if(ctypes.CDLL(root_path + '/library/lib.so').mov(0,1,int(command[2])) < 0):
+                if(ctypes.CDLL(root_path + '/library/lib.so').push(command[1]) < 0):
                     print("Error ejecutando instruccion PUSH")
-                    sys.exit()
+                    #sys.exit()
 
             elif(command[0] == "TOUCH"):
                 print("Ejecutando TOUCH")
-                if(ctypes.CDLL(root_path + '/library/lib.so').mov(0,1,int(command[2])) < 0):
+                if(ctypes.CDLL(root_path + '/library/lib.so').touch() < 0):
                     print("Error ejecutando instruccion TOUCH")
-                    sys.exit()
+                    #sys.exit()
             else:
                 print("Error inesperado detectando instrucciones!")
                 sys.exit()

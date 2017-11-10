@@ -1,21 +1,21 @@
 /*H**********************************************************************
-* FILENAME :        lib.cpp             
+* FILENAME :        lib.cpp
 *
 * DESCRIPTION :
 *       Biblioteca encargada de comunicarse con el driver del Arduino UNO
 *
 * PUBLIC FUNCTIONS :
-*       int	mov	(int motor, int direccion, int steps)
+*       int	drag	(int motor, int direccion, int steps)
 *	int	drop	(int tiempo)
 *
 * NOTES :
-*      
+*
 *
 * AUTHOR :    Santiago Vargas de Kruijf
 *
 * CHANGES :
 *
-* DATE: 5 Nov 2017      
+* DATE: 5 Nov 2017
 *
 *H*/
 
@@ -28,15 +28,13 @@
 FILE * device;   //Puntero al archivo que controla Arduino
 using namespace std;
 
-extern "C" 
+extern "C"
 {
-  
-
 
 /*
 	Metodo encargado de hacer la llamada para el movimiento de los servos en X o Y.
 */
-int mov(int motor, int direccion, int steps){
+int drag(int motor, int direccion, int steps){
 	device = fopen("/dev/arduino","r+");
 	if(device != NULL){
 		if(direccion == 0) {
@@ -47,8 +45,8 @@ int mov(int motor, int direccion, int steps){
 
 		fprintf(device,  "001_%d\n", steps);
 		fclose(device);
-		return 0;	
-		
+		return 0;
+
 	}
 	else{
 		printf("File no found\n");
@@ -58,26 +56,45 @@ int mov(int motor, int direccion, int steps){
 
 
 /*
-	Metodo encargado de hacer la llamada para bajar el dedo en la posicion actual.
+	Metodo encargado de hacer la llamada para tocar la pantalla durante un determinado tiempo.
 */
-int drop(int tiempo){
-	return 0;	
+int push(int tiempo){
+  device = fopen("/dev/arduino","r+");
+	if(device != NULL){
+		fprintf(device,  "100_%d\n", tiempo);
+		fclose(device);
+		return 0;
+	}
+	else{
+		printf("File no found\n");
+		return -1;
+	}
+}
+
+/*
+	Metodo encargado de hacer la llamada para tocar la pantalla e inmediatamente subir el dedo.
+*/
+int touch(){
+  device = fopen("/dev/arduino","r+");
+	if(device != NULL){
+		fprintf(device,  "200_%d\n",0);
+		fclose(device);
+		return 0;
+	}
+	else{
+		printf("File no found\n");
+		return -1;
+	}
 }
 
 int main(){
-	int i = mov(1,0,3200);
-	mov(1,1,3000);
-	mov(1,1,5000);
-	mov(1,0,200);
-	mov(1,1,1000);
+	int i = drag(1,0,3200);
+	drag(1,1,3000);
+	drag(1,1,5000);
+	drag(1,0,200);
+	drag(1,1,1000);
 
 	return i;
 }
 
 }
-
-
-
-
-
-
