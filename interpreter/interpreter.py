@@ -100,32 +100,32 @@ def calcular_trayectoria(path):
         moved = False                                       # X->M0 = 0. Y->M1 = 1, IZQ = 0, DER = 1, STEPS(calculados)
         if(not moved and j+1<len(teclado[i])):
             if(teclado[i][j+1] == int(path[k])):
-                #print("Derecha")
-                instruccion = (1,1,3200)
+                #print("Derecha")                           drag(0,1,1000);// Servo flotante derecha
+                instruccion = (0,1,1000)
                 camino.append(instruccion)
                 k += 1
                 j += 1
                 moved = True
         if(not moved and j-1 >= 0):
             if(teclado[i][j-1] == int(path[k])):
-                #print("Izquierda")
-                instruccion = (1,1,3200)
+                #print("Izquierda")                         drag(0,0,1000);	// Servo flotante izquierda
+                instruccion = (0,0,1000)
                 camino.append(instruccion)
                 k += 1
                 j -= 1
                 moved = True
         if(not moved and i+1<len(teclado)):
             if(teclado[i+1][j] == int(path[k])):
-                #print("Abajo")
-                instruccion = (1,1,3200)
+                #print("Abajo")                              drag(1,0,1000);	// Servo principal hacia atras
+                instruccion = (1,0,1000)
                 camino.append(instruccion)
                 k += 1
                 i += 1
                 moved = True
         if(not moved and i-1 >= 0):
             if(teclado[i-1][j] == int(path[k])):
-                #print("Arriba")
-                instruccion = (1,1,3200)
+                #print("Arriba")                             drag(1,1,1000);	// Servo principal hacia adelante
+                instruccion = (1,1,1000)
                 camino.append(instruccion)
                 k += 1
                 i -= 1
@@ -224,9 +224,9 @@ def main(argv):
                     for instruccion in instrucciones:                   # Arreglo de tuplas, cada tupla tiene (X|Y,IZQ|DER,STEPS)
 
                         if(ctypes.CDLL(root_path + '/library/lib.so').drag(instruccion[0],instruccion[1],instruccion[2]) < 0):
-                            #print("Error ejecutando instruccion DRAG")
-                            #sys.exit()
-                            pass
+                            print("Error ejecutando instruccion DRAG")
+                            sys.exit()
+                            #pass
                     print("")
 
                 else:

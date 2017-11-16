@@ -69,7 +69,7 @@ void loop()
           {
             digitalWrite(motor1_step_pin, LOW);  // This LOW to HIGH change is what creates the
             digitalWrite(motor1_step_pin, HIGH); // "Rising Edge" so the easydriver knows to when to step.
-            delayMicroseconds(250);      // This delay time is close to top speed for this
+            delayMicroseconds(450);      // This delay time is close to top speed for this
           }
           
           digitalWrite(motor1_enable_pin, HIGH);  
@@ -88,7 +88,7 @@ void loop()
           {
             digitalWrite(motor1_step_pin, LOW);  // This LOW to HIGH change is what creates the
             digitalWrite(motor1_step_pin, HIGH); // "Rising Edge" so the easydriver knows to when to step.
-            delayMicroseconds(250);      // This delay time is close to top speed for this
+            delayMicroseconds(450);      // This delay time is close to top speed for this
           }
           
           digitalWrite(motor1_enable_pin, HIGH);  
@@ -106,7 +106,7 @@ void loop()
           {
             digitalWrite(motor2_step_pin, LOW);  // This LOW to HIGH change is what creates the
             digitalWrite(motor2_step_pin, HIGH); // "Rising Edge" so the easydriver knows to when to step.
-            delayMicroseconds(250);      // This delay time is close to top speed for this
+            delayMicroseconds(400);      // This delay time is close to top speed for this
           }
           
           digitalWrite(motor2_enable_pin, HIGH);  
@@ -124,7 +124,7 @@ void loop()
           {
             digitalWrite(motor2_step_pin, LOW);  // This LOW to HIGH change is what creates the
             digitalWrite(motor2_step_pin, HIGH); // "Rising Edge" so the easydriver knows to when to step.
-            delayMicroseconds(250);      // This delay time is close to top speed for this
+            delayMicroseconds(400);      // This delay time is close to top speed for this
           }
           
           digitalWrite(motor2_enable_pin, HIGH);  

@@ -45,16 +45,28 @@ extern "C"
 int drag(int motor, int direccion, int steps){
 	device = fopen("/dev/arduino","r+");
 	if(device != NULL){
-		if(direccion == 0) {
-			fprintf(device,  "000_%d\n", steps);
+		if(motor==0){
+			if(direccion == 0) {
+				fprintf(device,  "000_%d\n", steps);
+				fclose(device);
+				return 0;
+			}
+
+			fprintf(device,  "001_%d\n", steps);
+			fclose(device);
+			return 0;
+		} else {
+
+			if(direccion == 1) {
+				fprintf(device,  "010_%d\n", steps);
+				fclose(device);
+				return 0;
+			}
+
+			fprintf(device,  "011_%d\n", steps);
 			fclose(device);
 			return 0;
 		}
-
-		fprintf(device,  "001_%d\n", steps);
-		fclose(device);
-		return 0;
-
 	}
 	else{
 		printf("Lib: Error al comunicarse con driver\n");
@@ -96,13 +108,11 @@ int drag(int motor, int direccion, int steps){
   }
 
   int main(){
-  	int i = drag(1,0,3200);
-  	drag(1,1,3000);
-  	drag(1,1,5000);
-  	drag(1,0,200);
-  	drag(1,1,1000);
-
-  	return i;
+  	drag(0,0,1000);	// Servo flotante izquierda
+  	drag(0,1,1000);// Servo flotante derecha
+		drag(1,0,1000);	// Servo principal hacia atras
+		drag(1,1,1000);	// Servo principal hacia adelante
+  	return 0;
   }
 
 }
