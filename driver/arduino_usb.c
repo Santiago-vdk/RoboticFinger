@@ -30,7 +30,7 @@
 //Defines
 
 #define VENDOR_ID 0x2341 //Microchip
-#define PRODUCT_ID 0x0043 //PIC18F4550
+#define PRODUCT_ID 0x0010 //0010 MEGA     // 0043 UNO
 
 #define USB_PIC18F_MINOR_BASE 0
 
@@ -48,7 +48,7 @@ struct usb_pic18f
     struct mutex   pic18f_mutex;
 
     unsigned char intr_in_buffer[MAX_PKT_SIZE];
-unsigned char *		bulk_in_buffer;		// the buffer to receive data 
+unsigned char *		bulk_in_buffer;		// the buffer to receive data
 	size_t			bulk_in_size;		// the size of the receive buffer
     struct usb_endpoint_descriptor*           bulk_in_endpointAddr;
     struct usb_endpoint_descriptor*           bulk_out_endpointAddr;
@@ -286,7 +286,7 @@ error:
     usb_free_urb(urb);
     kfree(buf);
     return retval;
-  
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -298,7 +298,7 @@ static const struct file_operations pic18f_fops =
     .write =	pic18f_write,
     .open =	pic18f_open,
     .release =	pic18f_release,
-    
+
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -392,7 +392,7 @@ printk("Endpoints: %d", iface_desc->desc.bNumEndpoints);
 return 0;
 
 	}
-	
+
         endpoint = (struct usb_endpoint_descriptor*)&iface_desc->endpoint[0].desc;
 
 	printk(KERN_INFO "ED[1]->bEndpointAddress: 0x%02X\n", endpoint->bEndpointAddress);
@@ -505,5 +505,3 @@ module_init(pic18f_init);
 module_exit(pic18f_exit);
 
 MODULE_LICENSE("GPL");
-
-

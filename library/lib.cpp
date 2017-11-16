@@ -108,10 +108,10 @@ int drag(int motor, int direccion, int steps){
   }
 
   int main(){
-  	drag(0,0,1000);	// Servo flotante izquierda
-  	drag(0,1,1000);// Servo flotante derecha
-		drag(1,0,1000);	// Servo principal hacia atras
-		drag(1,1,1000);	// Servo principal hacia adelante
+  	drag(0,0,1500);	// Servo flotante izquierda
+  	drag(0,1,1500);// Servo flotante derecha
+		drag(1,0,2000);	// Servo principal hacia atras
+		drag(1,1,2000);	// Servo principal hacia adelante
   	return 0;
   }
 
