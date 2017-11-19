@@ -1,3 +1,12 @@
+#include <Servo.h>
+
+
+int servoPin = 3;
+
+Servo servo;  
+ 
+int servoAngle = 0;   // servo position in degrees
+
 String inData;
 
 int motor1_dir_pin = 52;
@@ -22,9 +31,13 @@ void setup()
   
   digitalWrite(motor1_enable_pin, HIGH); // Iniciamos el motor 1 apagado (Evita sonido agudo de bobina)
   digitalWrite(motor2_enable_pin, HIGH); // Iniciamos el motor 1 apagado (Evita sonido agudo de bobina)
+  servo.attach(servoPin);
   
   Serial.setTimeout(50);
-  Serial.begin(38400);     // opens serial port, sets data rate to 9600 bps
+  Serial.begin(9600);    // USB serial port 0
+  Serial3.begin(9600);   // serial port 3
+
+
 }
 
 
@@ -44,22 +57,28 @@ void loop()
     {
         //Serial.print("Arduino Received: ");
         //Serial.print(inData);
-
+      
 
         String operacion = inData.substring(0, inData.indexOf('_'));
         inData = inData.substring(inData.indexOf('_') + 1, inData.length());
-        
-        /*String motor = inData.substring(0, inData.indexOf('_'));
-        inData = inData.substring(inData.indexOf('_') + 1, inData.length());
-        
-        String direccion = inData.substring(0, inData.indexOf('_'));
-        inData = inData.substring(inData.indexOf('_') + 1, inData.length());*/
         
         String steps = inData.substring(0, inData.indexOf('_'));
         
         
         if(operacion == "000" & steps.length() > 0){
           //Serial.print("Rotando M1 hacia la izquierda\n");
+          // Escribir a servo gemelo
+          String instruccion = "$000_";
+          String eof = "%";
+          String mensaje = "";
+          mensaje.concat(instruccion);
+          steps.trim();
+          mensaje.concat(steps);
+          mensaje.concat(eof);
+          
+          //Serial.print(mensaje);
+          
+          Serial3.write(mensaje.c_str());
           
           digitalWrite(motor1_enable_pin, LOW);
     
@@ -70,7 +89,7 @@ void loop()
           {
             digitalWrite(motor1_step_pin, LOW);  // This LOW to HIGH change is what creates the
             digitalWrite(motor1_step_pin, HIGH); // "Rising Edge" so the easydriver knows to when to step.
-            delayMicroseconds(450);      // This delay time is close to top speed for this
+            delayMicroseconds(500);      // This delay time is close to top speed for this
           }
           
           digitalWrite(motor1_enable_pin, HIGH);  
@@ -78,6 +97,18 @@ void loop()
           
         } else if(operacion == "001" & steps.length() > 0){
           //Serial.print("Rotando M1 hacia la derecha\n");
+          // Escribir a servo gemelo
+          String instruccion = "$001_";
+          String eof = "%";
+          String mensaje = "";
+          mensaje.concat(instruccion);
+          steps.trim();
+          mensaje.concat(steps);
+          mensaje.concat(eof);
+          
+          //Serial.print(mensaje);
+          
+          Serial3.write(mensaje.c_str());
           
           digitalWrite(motor1_enable_pin, LOW);
     
@@ -89,7 +120,7 @@ void loop()
           {
             digitalWrite(motor1_step_pin, LOW);  // This LOW to HIGH change is what creates the
             digitalWrite(motor1_step_pin, HIGH); // "Rising Edge" so the easydriver knows to when to step.
-            delayMicroseconds(450);      // This delay time is close to top speed for this
+            delayMicroseconds(500);      // This delay time is close to top speed for this
           }
           
           digitalWrite(motor1_enable_pin, HIGH);  
@@ -107,7 +138,7 @@ void loop()
           {
             digitalWrite(motor2_step_pin, LOW);  // This LOW to HIGH change is what creates the
             digitalWrite(motor2_step_pin, HIGH); // "Rising Edge" so the easydriver knows to when to step.
-            delayMicroseconds(400);      // This delay time is close to top speed for this
+            delayMicroseconds(500);      // This delay time is close to top speed for this
           }
           
           digitalWrite(motor2_enable_pin, HIGH);  
@@ -125,12 +156,24 @@ void loop()
           {
             digitalWrite(motor2_step_pin, LOW);  // This LOW to HIGH change is what creates the
             digitalWrite(motor2_step_pin, HIGH); // "Rising Edge" so the easydriver knows to when to step.
-            delayMicroseconds(400);      // This delay time is close to top speed for this
+            delayMicroseconds(500);      // This delay time is close to top speed for this
           }
           
           digitalWrite(motor2_enable_pin, HIGH);  
      
-        } 
+        }  else if(operacion == "100" & steps.length() > 0){
+          //Serial.print("Rotando dedo\n");
+ 
+          // Desplazamos a la posición 180º
+          servo.write(100);
+          // Esperamos 1 segundo
+          //delay(steps.toInt()*1000);
+          delay(300);
+           // Desplazamos a la posición 0º
+          servo.write(0);
+ 
+ 
+        }
         
         else {
           Serial.print("Operacion Desconocida\n");

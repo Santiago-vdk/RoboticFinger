@@ -29,21 +29,19 @@ INT_NUMBER		:   DIGIT+;
  * Lexer Rules
  */
 
-fragment A          : ('A'|'a') ;
-fragment C          : ('C'|'c') ;
-fragment D          : ('D'|'d') ;
-fragment P          : ('P'|'p') ;
-fragment G          : ('G'|'g') ;
-fragment R          : ('R'|'r') ;
-fragment S          : ('S'|'s') ;
-fragment Y          : ('Y'|'y') ;
-fragment H          : ('H'|'h') ;
-fragment O          : ('O'|'o') ;
-fragment U          : ('U'|'u') ;
-fragment T          : ('T'|'t') ;
+fragment A          : ('A') ;
+fragment C          : ('C') ;
+fragment D          : ('D') ;
+fragment P          : ('P') ;
+fragment G          : ('G') ;
+fragment R          : ('R') ;
+fragment S          : ('S') ;
+fragment Y          : ('Y') ;
+fragment H          : ('H') ;
+fragment O          : ('O') ;
+fragment U          : ('U') ;
+fragment T          : ('T') ;
 
-fragment LOWERCASE  : [a-z] ;
-fragment UPPERCASE  : [A-Z] ;
 
 DIGIT   :   ('0'..'9');
 
