@@ -164,92 +164,108 @@ class bcolors:
 
 def main(argv):
 
-    if len(argv) < 3:
-        print(bcolors.FAIL + "Favor especificar archivo de configuracion y un tamaño SMALL | MEDIUM | LARGE" + bcolors.ENDC)
-        sys.exit()
+    if(argv[1] == "calibrar"):
+        print("Iniciando calibrado, verifique el estado inicial de la maquina...")
 
-    # Etapa de parseo y revision de sintaxis
-    input = FileStream(argv[1])
-    lexer = RoboticFingerLexer(input)
-
-    lexer.removeErrorListeners()
-    lexer._listeners = [ MyErrorListener() ]
-
-    stream = CommonTokenStream(lexer)
-    parser = RoboticFingerParser(stream)
-    parser._listeners = [ MyErrorListener() ]
-
-    tree = parser.roboticfinger()
-
-    listen = RoboticFingerListener()
-    walker = ParseTreeWalker()
-    walker.walk(listen, tree)
-
-
-    # Etapa para obtener el tamaño del teclado
-    tam_teclado = argv[2]
-    if(tam_teclado == "small" or tam_teclado == "SMALL"):
-        seleccionar_teclado("SMALL")
-    elif(tam_teclado == "medium" or tam_teclado == "MEDIUM"):
-        seleccionar_teclado("MEDIUM")
-    elif(tam_teclado == "large" or tam_teclado == "LARGE"):
-        seleccionar_teclado("LARGE")
+        if(ctypes.CDLL(root_path + '/library/lib.so').drag(0,0,3700) < 0):
+            print("Error ejecutando instruccion DRAG")
+            sys.exit()
+        if(ctypes.CDLL(root_path + '/library/lib.so').drag(0,1,3700) < 0):
+            print("Error ejecutando instruccion DRAG")
+            sys.exit()
+        if(ctypes.CDLL(root_path + '/library/lib.so').drag(1,1,3000) < 0):
+            print("Error ejecutando instruccion DRAG")
+            sys.exit()
+        if(ctypes.CDLL(root_path + '/library/lib.so').drag(1,0,3000) < 0):
+            print("Error ejecutando instruccion DRAG")
+            sys.exit()
     else:
-        print(bcolors.FAIL + "Tamaño de teclado indefinido (SMALL | MEDIUM | LARGE)"  + bcolors.ENDC)
-        sys.exit()
+        if len(argv) < 3:
+            print(bcolors.FAIL + "Favor especificar archivo de configuracion y un tamaño SMALL | MEDIUM | LARGE" + bcolors.ENDC)
+            sys.exit()
 
-    # Inicio de la secuencia
-    print(bcolors.OKGREEN + "Ejecutando secuencia...\n" + bcolors.ENDC)
-    with open(root_path + "/configuration") as fp:  # Se lee la configuracion previamente validada sintacticamente
-        for line in fp:
-            line = line.rstrip()        # Removemos el \n del archivo
-            command = line.split(' ')       # Se separa cada instruccion para procesarse
+        # Etapa de parseo y revision de sintaxis
+        input = FileStream(argv[1])
+        lexer = RoboticFingerLexer(input)
 
-            if(command[0] == "DRAG"):       # Instruccion DRAG
-                print("Ejecutando DRAG")
+        lexer.removeErrorListeners()
+        lexer._listeners = [ MyErrorListener() ]
 
-                desde = teclado[ pos_actual[0] ][ pos_actual[1] ]   # Direccion desde la que estamos partiendo
-                hasta = teclado[ int(command[1]) ][ int(command[2]) ]   # Direccion a la que deseamos llegar
-                print("Desde " + str(desde) + ", Hasta " + str(hasta))
-                if(desde != hasta):                                        # En caso de ya estar en la direccion desda IGNORAR
+        stream = CommonTokenStream(lexer)
+        parser = RoboticFingerParser(stream)
+        parser._listeners = [ MyErrorListener() ]
 
-                    path = dijkstra(graph,str(desde),str(hasta),[],{},{})   # Calculo de dijkstra para obtener el camino mas corto en el grafo
-                    path = path[::-1]   # Inversion de la lista obtenida
+        tree = parser.roboticfinger()
 
-                    print("Camino a seguir: " + str(path))
-                    instrucciones = calcular_trayectoria(path)  # Se traducen el camino que nos retorna dijkstra a su equivalencia en intrucciones de la biblioteca
+        listen = RoboticFingerListener()
+        walker = ParseTreeWalker()
+        walker.walk(listen, tree)
 
-                    pos_actual[0] = int(command[1])
-                    pos_actual[1] = int(command[2])
-                    for instruccion in instrucciones:                   # Arreglo de tuplas, cada tupla tiene (X|Y,IZQ|DER,STEPS)
 
-                        if(ctypes.CDLL(root_path + '/library/lib.so').drag(instruccion[0],instruccion[1],instruccion[2]) < 0):
-                            print("Error ejecutando instruccion DRAG")
-                            sys.exit()
-                            #pass
+        # Etapa para obtener el tamaño del teclado
+        tam_teclado = argv[2]
+        if(tam_teclado == "small" or tam_teclado == "SMALL"):
+            seleccionar_teclado("SMALL")
+        elif(tam_teclado == "medium" or tam_teclado == "MEDIUM"):
+            seleccionar_teclado("MEDIUM")
+        elif(tam_teclado == "large" or tam_teclado == "LARGE"):
+            seleccionar_teclado("LARGE")
+        else:
+            print(bcolors.FAIL + "Tamaño de teclado indefinido (SMALL | MEDIUM | LARGE)"  + bcolors.ENDC)
+            sys.exit()
+
+        # Inicio de la secuencia
+        print(bcolors.OKGREEN + "Ejecutando secuencia...\n" + bcolors.ENDC)
+        with open(root_path + "/configuration") as fp:  # Se lee la configuracion previamente validada sintacticamente
+            for line in fp:
+                line = line.rstrip()        # Removemos el \n del archivo
+                command = line.split(' ')       # Se separa cada instruccion para procesarse
+
+                if(command[0] == "DRAG"):       # Instruccion DRAG
+                    print("Ejecutando DRAG")
+
+                    desde = teclado[ pos_actual[0] ][ pos_actual[1] ]   # Direccion desde la que estamos partiendo
+                    hasta = teclado[ int(command[1]) ][ int(command[2]) ]   # Direccion a la que deseamos llegar
+                    print("Desde " + str(desde) + ", Hasta " + str(hasta))
+                    if(desde != hasta):                                        # En caso de ya estar en la direccion desda IGNORAR
+
+                        path = dijkstra(graph,str(desde),str(hasta),[],{},{})   # Calculo de dijkstra para obtener el camino mas corto en el grafo
+                        path = path[::-1]   # Inversion de la lista obtenida
+
+                        print("Camino a seguir: " + str(path))
+                        instrucciones = calcular_trayectoria(path)  # Se traducen el camino que nos retorna dijkstra a su equivalencia en intrucciones de la biblioteca
+
+                        pos_actual[0] = int(command[1])
+                        pos_actual[1] = int(command[2])
+                        for instruccion in instrucciones:                   # Arreglo de tuplas, cada tupla tiene (X|Y,IZQ|DER,STEPS)
+
+                            if(ctypes.CDLL(root_path + '/library/lib.so').drag(instruccion[0],instruccion[1],instruccion[2]) < 0):
+                                print("Error ejecutando instruccion DRAG")
+                                sys.exit()
+                                #pass
+                        print("")
+
+                    else:
+                        print("DRAG IGNORADO")
+
+                elif(command[0] == "PUSH"):
+                    print("Ejecutando PUSH")
+                    if(ctypes.CDLL(root_path + '/library/lib.so').push(command[1]) < 0):
+                        #print("Error ejecutando instruccion PUSH")
+                        #sys.exit()
+                        pass
                     print("")
-
+                elif(command[0] == "TOUCH"):
+                    print("Ejecutando TOUCH")
+                    if(ctypes.CDLL(root_path + '/library/lib.so').touch() < 0):
+                        #print("Error ejecutando instruccion TOUCH")
+                        #sys.exit()
+                        pass
+                    print("")
                 else:
-                    print("DRAG IGNORADO")
-
-            elif(command[0] == "PUSH"):
-                print("Ejecutando PUSH")
-                if(ctypes.CDLL(root_path + '/library/lib.so').push(command[1]) < 0):
-                    #print("Error ejecutando instruccion PUSH")
-                    #sys.exit()
+                    #print("Error inesperado detectando instrucciones!")
+                    sys.exit()
                     pass
-                print("")
-            elif(command[0] == "TOUCH"):
-                print("Ejecutando TOUCH")
-                if(ctypes.CDLL(root_path + '/library/lib.so').touch() < 0):
-                    #print("Error ejecutando instruccion TOUCH")
-                    #sys.exit()
-                    pass
-                print("")
-            else:
-                #print("Error inesperado detectando instrucciones!")
-                sys.exit()
-                pass
 
 
 if __name__ == '__main__':
