@@ -32,7 +32,7 @@ void setup()
   digitalWrite(motor1_enable_pin, HIGH); // Iniciamos el motor 1 apagado (Evita sonido agudo de bobina)
   digitalWrite(motor2_enable_pin, HIGH); // Iniciamos el motor 1 apagado (Evita sonido agudo de bobina)
   servo.attach(servoPin);
-  
+  servo.write(0);
   Serial.setTimeout(50);
   Serial.begin(9600);    // USB serial port 0
   Serial3.begin(9600);   // serial port 3
@@ -89,7 +89,7 @@ void loop()
           {
             digitalWrite(motor1_step_pin, LOW);  // This LOW to HIGH change is what creates the
             digitalWrite(motor1_step_pin, HIGH); // "Rising Edge" so the easydriver knows to when to step.
-            delayMicroseconds(500);      // This delay time is close to top speed for this
+            delayMicroseconds(1000);      // This delay time is close to top speed for this
           }
           
           digitalWrite(motor1_enable_pin, HIGH);  
@@ -120,7 +120,7 @@ void loop()
           {
             digitalWrite(motor1_step_pin, LOW);  // This LOW to HIGH change is what creates the
             digitalWrite(motor1_step_pin, HIGH); // "Rising Edge" so the easydriver knows to when to step.
-            delayMicroseconds(500);      // This delay time is close to top speed for this
+            delayMicroseconds(1000);      // This delay time is close to top speed for this
           }
           
           digitalWrite(motor1_enable_pin, HIGH);  
@@ -138,7 +138,7 @@ void loop()
           {
             digitalWrite(motor2_step_pin, LOW);  // This LOW to HIGH change is what creates the
             digitalWrite(motor2_step_pin, HIGH); // "Rising Edge" so the easydriver knows to when to step.
-            delayMicroseconds(500);      // This delay time is close to top speed for this
+            delayMicroseconds(1000);      // This delay time is close to top speed for this
           }
           
           digitalWrite(motor2_enable_pin, HIGH);  
@@ -156,7 +156,7 @@ void loop()
           {
             digitalWrite(motor2_step_pin, LOW);  // This LOW to HIGH change is what creates the
             digitalWrite(motor2_step_pin, HIGH); // "Rising Edge" so the easydriver knows to when to step.
-            delayMicroseconds(500);      // This delay time is close to top speed for this
+            delayMicroseconds(1000);      // This delay time is close to top speed for this
           }
           
           digitalWrite(motor2_enable_pin, HIGH);  
@@ -165,10 +165,14 @@ void loop()
           //Serial.print("Rotando dedo\n");
  
           // Desplazamos a la posición 180º
-          servo.write(100);
-          // Esperamos 1 segundo
-          //delay(steps.toInt()*1000);
-          delay(300);
+          servo.write(40);
+          // Esperamos 
+          if(steps.toInt() != 0){
+            delay(steps.toInt()*1000);
+          } else {
+          delay(300);   
+          }
+         
            // Desplazamos a la posición 0º
           servo.write(0);
  

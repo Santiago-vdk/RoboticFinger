@@ -12,6 +12,8 @@ from RoboticFingerParser import RoboticFingerParser
 from RoboticFingerListener import RoboticFingerListener
 from antlr4.error.ErrorListener import ErrorListener
 
+distancia = 0
+
 class MyErrorListener( ErrorListener ):
     def syntaxError(self, recognizer, offendingSymbol, line, column, msg, e):
        	print(msg + " line: " + str(line) + " column: " + str(column))
@@ -74,7 +76,7 @@ def dijkstra(graph,src,dest,visited=[],distances={},predecessors={}):
 teclado =  [[7,8,9],    # Se utiliza para manejar el posicionamiento global del dedo
             [4,5,6],
             [1,2,3],
-            [0,-1,-1]]
+            [0,-1,10]]
 
 graph = {'7': {'8': 1, '4': 1},
          '8': {'7': 1, '5': 1, '9':1},
@@ -84,8 +86,10 @@ graph = {'7': {'8': 1, '4': 1},
          '6': {'9': 1, '5': 1, '3': 1},
          '1': {'4': 1, '2': 1, '0': 1},
          '2': {'5': 1, '1': 1, '3': 1},
-         '3': {'2': 1, '6': 1},
-         '0': {'1': 1}}
+         '3': {'2': 1, '6': 1, '10': 10},
+         '0': {'1': 1},
+         '10': {'3': 3},
+         }
 
 
 
@@ -100,32 +104,57 @@ def calcular_trayectoria(path):
         moved = False                                       # X->M0 = 0. Y->M1 = 1, IZQ = 0, DER = 1, STEPS(calculados)
         if(not moved and j+1<len(teclado[i])):
             if(teclado[i][j+1] == int(path[k])):
-                #print("Derecha")                           drag(0,1,1000);// Servo flotante derecha
-                instruccion = (0,1,1000)
+                #print("ARRIBA")
+                #print("I: " + str(i) + " J: " + str(j))                       #    drag(0,1,1000);// Servo flotante derecha
+                if(tamanio == "SMALL"):
+                    instruccion = (1,1,240)
+                elif(tamanio == "MEDIUM"):
+                    instruccion = (1,1,240)
+                else:
+                    instruccion = (1,1,240)
                 camino.append(instruccion)
                 k += 1
                 j += 1
                 moved = True
         if(not moved and j-1 >= 0):
             if(teclado[i][j-1] == int(path[k])):
-                #print("Izquierda")                         drag(0,0,1000);	// Servo flotante izquierda
-                instruccion = (0,0,1000)
+                #print("ABAJO")                     #    drag(0,0,1000);	// Servo flotante izquierda
+                #print("I: " + str(i) + " J: " + str(j))
+                if(tamanio == "SMALL"):
+                    instruccion = (1,0,240)
+                elif(tamanio == "MEDIUM"):
+                    instruccion = (1,0,240)
+                else:
+                    instruccion = (1,0,240)
                 camino.append(instruccion)
                 k += 1
                 j -= 1
                 moved = True
         if(not moved and i+1<len(teclado)):
             if(teclado[i+1][j] == int(path[k])):
-                #print("Abajo")                              drag(1,0,1000);	// Servo principal hacia atras
-                instruccion = (1,0,1000)
+                #print("DERECHA")                           #   drag(1,0,1000);	// Servo principal hacia atras
+                #print("I: " + str(i) + " J: " + str(j))
+                if(tamanio == "SMALL"):
+                    instruccion = (0,1,240)
+                elif(tamanio == "MEDIUM"):
+                    instruccion = (0,1,240)
+                else:
+                    instruccion = (0,1,240)
                 camino.append(instruccion)
                 k += 1
                 i += 1
                 moved = True
         if(not moved and i-1 >= 0):
             if(teclado[i-1][j] == int(path[k])):
-                #print("Arriba")                             drag(1,1,1000);	// Servo principal hacia adelante
-                instruccion = (1,1,1000)
+                #print("IZQUIERDA")                            # drag(1,1,1000);	// Servo principal hacia adelante
+                #print("I: " + str(i) + " J: " + str(j))
+                if(tamanio == "SMALL"):
+                    instruccion = (0,0,240)
+                elif(tamanio == "MEDIUM"):
+                    instruccion = (0,0,240)
+                else:
+                    instruccion = (0,0,240)
+
                 camino.append(instruccion)
                 k += 1
                 i -= 1
@@ -140,13 +169,13 @@ pos_actual = [0,0]
 
 def seleccionar_teclado(tamanio):
     if(tamanio == "SMALL"):
-        tamanio = 2
+        #tamanio = 2
         print(bcolors.HEADER + "Teclado definido: SMALL" + bcolors.ENDC)
     elif(tamanio == "MEDIUM"):
-        tamanio = 3
+        #tamanio = 3
         print(bcolors.HEADER + "Teclado definido: MEDIUM"+ bcolors.ENDC)
     elif(tamanio == "LARGE"):
-        tamanio = 5
+        #tamanio = 5
         print(bcolors.HEADER + "Teclado definido: LARGE"+ bcolors.ENDC)
     else:
         print(bcolors.FAIL + "Error inesperado seleccionando teclado!" + bcolors.ENDC)
@@ -167,18 +196,41 @@ def main(argv):
     if(argv[1] == "calibrar"):
         print("Iniciando calibrado, verifique el estado inicial de la maquina...")
 
-        if(ctypes.CDLL(root_path + '/library/lib.so').drag(0,0,3700) < 0):
+        if(ctypes.CDLL(root_path + '/library/lib.so').drag(0,0,3400) < 0):
+             print("Error ejecutando instruccion DRAG")
+             sys.exit()
+        if(ctypes.CDLL(root_path + '/library/lib.so').drag(0,1,3400) < 0):
             print("Error ejecutando instruccion DRAG")
             sys.exit()
-        if(ctypes.CDLL(root_path + '/library/lib.so').drag(0,1,3700) < 0):
+        if(ctypes.CDLL(root_path + '/library/lib.so').drag(1,1,900) < 0):
             print("Error ejecutando instruccion DRAG")
             sys.exit()
-        if(ctypes.CDLL(root_path + '/library/lib.so').drag(1,1,3000) < 0):
+        if(ctypes.CDLL(root_path + '/library/lib.so').touch() < 0):
             print("Error ejecutando instruccion DRAG")
             sys.exit()
-        if(ctypes.CDLL(root_path + '/library/lib.so').drag(1,0,3000) < 0):
+
+        if(ctypes.CDLL(root_path + '/library/lib.so').drag(1,1,900) < 0):
             print("Error ejecutando instruccion DRAG")
             sys.exit()
+
+        if(ctypes.CDLL(root_path + '/library/lib.so').drag(1,0,900) < 0):
+            print("Error ejecutando instruccion DRAG")
+            sys.exit()
+
+        if(ctypes.CDLL(root_path + '/library/lib.so').push(2) < 0):
+            print("Error ejecutando instruccion DRAG")
+            sys.exit()
+
+        if(ctypes.CDLL(root_path + '/library/lib.so').drag(1,0,900) < 0):
+            print("Error ejecutando instruccion DRAG")
+            sys.exit()
+    elif(argv[1] == "touch"):
+        print("Bajando dedo...")
+
+        if(ctypes.CDLL(root_path + '/library/lib.so').touch() < 0):
+            print("Error ejecutando instruccion DRAG")
+            sys.exit()
+
     else:
         if len(argv) < 3:
             print(bcolors.FAIL + "Favor especificar archivo de configuracion y un tamaño SMALL | MEDIUM | LARGE" + bcolors.ENDC)
@@ -251,16 +303,14 @@ def main(argv):
                 elif(command[0] == "PUSH"):
                     print("Ejecutando PUSH")
                     if(ctypes.CDLL(root_path + '/library/lib.so').push(command[1]) < 0):
-                        #print("Error ejecutando instruccion PUSH")
-                        #sys.exit()
-                        pass
+                        print("Error ejecutando instruccion DRAG")
+                        sys.exit()
                     print("")
                 elif(command[0] == "TOUCH"):
                     print("Ejecutando TOUCH")
                     if(ctypes.CDLL(root_path + '/library/lib.so').touch() < 0):
-                        #print("Error ejecutando instruccion TOUCH")
-                        #sys.exit()
-                        pass
+                        print("Error ejecutando instruccion DRAG")
+                        sys.exit()
                     print("")
                 else:
                     #print("Error inesperado detectando instrucciones!")

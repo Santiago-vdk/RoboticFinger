@@ -97,7 +97,7 @@ int drag(int motor, int direccion, int steps){
   int touch(){
     device = fopen("/dev/arduino","r+");
   	if(device != NULL){
-  		fprintf(device,  "200_%d\n",0);
+  		fprintf(device,  "100_%d\n",0);
   		fclose(device);
   		return 0;
   	}
