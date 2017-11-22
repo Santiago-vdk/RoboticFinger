@@ -16,7 +16,8 @@ void setup()
   
 
   digitalWrite(motor1_enable_pin, HIGH); // Iniciamos el motor 1 apagado (Evita sonido agudo de bobina)
-
+  //Serial.setTimeout(2000);
+  //gtSerial.setTimeout(2000);
   Serial.begin(9600);    // serial / USB port
   gtSerial.begin(9600);  // software serial port
 }
@@ -70,7 +71,7 @@ void loop() {
           }
           
           digitalWrite(motor1_enable_pin, HIGH);  
-          
+          delay(500);
           
         } else if(operacion == "001" & steps.length() > 0){
           //Serial.print("Rotando M1 hacia la derecha\n");
@@ -88,7 +89,7 @@ void loop() {
           }
           
           digitalWrite(motor1_enable_pin, HIGH);  
-     
+           delay(500);
         } 
       
       

@@ -33,7 +33,8 @@ void setup()
   digitalWrite(motor2_enable_pin, HIGH); // Iniciamos el motor 1 apagado (Evita sonido agudo de bobina)
   servo.attach(servoPin);
   servo.write(0);
-  Serial.setTimeout(50);
+  //Serial.setTimeout(50);
+  //Serial3.setTimeout(2000);
   Serial.begin(9600);    // USB serial port 0
   Serial3.begin(9600);   // serial port 3
 
@@ -44,7 +45,7 @@ void setup()
 void loop()
 {
   int i;
-  
+
   while (Serial.available() > 0) {
     
     char recieved = Serial.read();
@@ -93,7 +94,7 @@ void loop()
           }
           
           digitalWrite(motor1_enable_pin, HIGH);  
-          
+          delay(500);
           
         } else if(operacion == "001" & steps.length() > 0){
           //Serial.print("Rotando M1 hacia la derecha\n");
@@ -124,6 +125,7 @@ void loop()
           }
           
           digitalWrite(motor1_enable_pin, HIGH);  
+          delay(500);
      
         } else if(operacion == "010" & steps.length() > 0){
           //Serial.print("Rotando M2 hacia la izquierda\n");
@@ -142,6 +144,7 @@ void loop()
           }
           
           digitalWrite(motor2_enable_pin, HIGH);  
+          delay(500);
      
         } else if(operacion == "011" & steps.length() > 0){
           //Serial.print("Rotando M2 hacia la derecha\n");
@@ -160,6 +163,7 @@ void loop()
           }
           
           digitalWrite(motor2_enable_pin, HIGH);  
+          delay(500);
      
         }  else if(operacion == "100" & steps.length() > 0){
           //Serial.print("Rotando dedo\n");
@@ -175,7 +179,7 @@ void loop()
          
            // Desplazamos a la posición 0º
           servo.write(0);
- 
+          delay(500);
  
         }
         

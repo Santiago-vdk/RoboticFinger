@@ -1,6 +1,7 @@
 import sys, os
 import ctypes
 import re
+import time
 
 root_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', ''))
 language_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'language'))
@@ -92,10 +93,12 @@ graph = {'7': {'8': 1, '4': 1},
          }
 
 
-
+global tamanio
+tamanio = -1            # Tamaño del teclado a manejar
 #print("----------------------------------------")
 
 def calcular_trayectoria(path):
+    global tamanio
     i = pos_actual[0]
     j = pos_actual[1]
     k = 1
@@ -106,12 +109,12 @@ def calcular_trayectoria(path):
             if(teclado[i][j+1] == int(path[k])):
                 #print("ARRIBA")
                 #print("I: " + str(i) + " J: " + str(j))                       #    drag(0,1,1000);// Servo flotante derecha
-                if(tamanio == "SMALL"):
-                    instruccion = (1,1,240)
-                elif(tamanio == "MEDIUM"):
-                    instruccion = (1,1,240)
+                if(tamanio == 0):
+                    instruccion = (1,1,230)
+                elif(tamanio == 1):
+                    instruccion = (1,1,210)
                 else:
-                    instruccion = (1,1,240)
+                    instruccion = (1,1,210)
                 camino.append(instruccion)
                 k += 1
                 j += 1
@@ -120,12 +123,12 @@ def calcular_trayectoria(path):
             if(teclado[i][j-1] == int(path[k])):
                 #print("ABAJO")                     #    drag(0,0,1000);	// Servo flotante izquierda
                 #print("I: " + str(i) + " J: " + str(j))
-                if(tamanio == "SMALL"):
-                    instruccion = (1,0,240)
-                elif(tamanio == "MEDIUM"):
-                    instruccion = (1,0,240)
+                if(tamanio == 0):
+                    instruccion = (1,0,230)
+                elif(tamanio == 1):
+                    instruccion = (1,0,210)
                 else:
-                    instruccion = (1,0,240)
+                    instruccion = (1,0,210)
                 camino.append(instruccion)
                 k += 1
                 j -= 1
@@ -134,12 +137,12 @@ def calcular_trayectoria(path):
             if(teclado[i+1][j] == int(path[k])):
                 #print("DERECHA")                           #   drag(1,0,1000);	// Servo principal hacia atras
                 #print("I: " + str(i) + " J: " + str(j))
-                if(tamanio == "SMALL"):
-                    instruccion = (0,1,240)
-                elif(tamanio == "MEDIUM"):
-                    instruccion = (0,1,240)
+                if(tamanio == 0):
+                    instruccion = (0,1,230)
+                elif(tamanio == 1):
+                    instruccion = (0,1,210)
                 else:
-                    instruccion = (0,1,240)
+                    instruccion = (0,1,210)
                 camino.append(instruccion)
                 k += 1
                 i += 1
@@ -148,12 +151,12 @@ def calcular_trayectoria(path):
             if(teclado[i-1][j] == int(path[k])):
                 #print("IZQUIERDA")                            # drag(1,1,1000);	// Servo principal hacia adelante
                 #print("I: " + str(i) + " J: " + str(j))
-                if(tamanio == "SMALL"):
-                    instruccion = (0,0,240)
-                elif(tamanio == "MEDIUM"):
-                    instruccion = (0,0,240)
+                if(tamanio == 0):
+                    instruccion = (0,0,230)
+                elif(tamanio == 1):
+                    instruccion = (0,0,210)
                 else:
-                    instruccion = (0,0,240)
+                    instruccion = (0,0,210)
 
                 camino.append(instruccion)
                 k += 1
@@ -164,18 +167,19 @@ def calcular_trayectoria(path):
             print("Camino no encontrado")
     return camino   # Devuelvo la equivalencia en instrucciones de la Biblioteca
 
-tamanio = -1            # Tamaño del teclado a manejar
+
 pos_actual = [0,0]
 
-def seleccionar_teclado(tamanio):
-    if(tamanio == "SMALL"):
-        #tamanio = 2
+def seleccionar_teclado(pTamanio):
+    global tamanio
+    if(pTamanio == "SMALL"):
+        tamanio = 0
         print(bcolors.HEADER + "Teclado definido: SMALL" + bcolors.ENDC)
-    elif(tamanio == "MEDIUM"):
-        #tamanio = 3
+    elif(pTamanio == "MEDIUM"):
+        tamanio = 1
         print(bcolors.HEADER + "Teclado definido: MEDIUM"+ bcolors.ENDC)
-    elif(tamanio == "LARGE"):
-        #tamanio = 5
+    elif(pTamanio == "LARGE"):
+        tamanio = 2
         print(bcolors.HEADER + "Teclado definido: LARGE"+ bcolors.ENDC)
     else:
         print(bcolors.FAIL + "Error inesperado seleccionando teclado!" + bcolors.ENDC)
@@ -290,7 +294,7 @@ def main(argv):
                         pos_actual[0] = int(command[1])
                         pos_actual[1] = int(command[2])
                         for instruccion in instrucciones:                   # Arreglo de tuplas, cada tupla tiene (X|Y,IZQ|DER,STEPS)
-
+                            print(instruccion)
                             if(ctypes.CDLL(root_path + '/library/lib.so').drag(instruccion[0],instruccion[1],instruccion[2]) < 0):
                                 print("Error ejecutando instruccion DRAG")
                                 sys.exit()
@@ -313,9 +317,10 @@ def main(argv):
                         sys.exit()
                     print("")
                 else:
-                    #print("Error inesperado detectando instrucciones!")
+                    print("Error inesperado detectando instrucciones!")
                     sys.exit()
                     pass
+                time.sleep(1)
 
 
 if __name__ == '__main__':
