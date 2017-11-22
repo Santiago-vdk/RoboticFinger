@@ -1,0 +1,272 @@
+<html>
+
+<head>
+
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font: 71%/1.5 Verdana, Sans-Serif;
+      background: #eee;
+    }
+
+    #container {
+
+      /*padding-left: 10%;
+      padding-right: 0%;
+      padding-top: 20%;
+      width: 760px;*/
+      text-align: center;
+    }
+
+    #keyboard {
+      margin: 0;
+
+      list-style: none;
+      padding-left: 27%;
+    }
+
+    #keyboard li {
+      float: left;
+      margin: 0 5px 5px 0;
+      width: 60px;
+      height: 60px;
+      font-size: 24px;
+      line-height: 60px;
+      text-align: center;
+      background: #fff;
+      border: 1px solid #f9f9f9;
+      border-radius: 5px;
+    }
+
+    .capslock,
+    .tab,
+    .left-shift,
+    .clearl,
+    .switch {
+      clear: left;
+    }
+
+    #keyboard .tab,
+    #keyboard .delete {
+      width: 70px;
+    }
+
+    #keyboard .capslock {
+      width: 80px;
+    }
+
+    #keyboard .return {
+      width: 90px;
+    }
+
+    #keyboard .left-shift {
+      width: 70px;
+    }
+
+    #keyboard .switch {
+      width: 90px;
+    }
+
+    #keyboard .rightright-shift {
+      width: 109px;
+    }
+
+    .lastitem {
+      margin-right: 0;
+    }
+
+    .uppercase {
+      text-transform: uppercase;
+    }
+
+    #keyboard .space {
+      float: left;
+      width: 556px;
+    }
+
+    #keyboard .switch,
+    #keyboard .space,
+    #keyboard .return {
+      font-size: 16px;
+    }
+
+    .on {
+      display: none;
+    }
+
+    #keyboard li:hover {
+      position: relative;
+      top: 1px;
+      left: 1px;
+      border-color: #e5e5e5;
+      cursor: pointer;
+    }
+    #alltext{
+
+      width: 261px;
+height: 500px;
+font-size: large;
+    }
+  </style>
+
+
+  <script>
+    $(document).ready(function() {
+$('#alltext').val("")
+      $('#numero').val("")
+      $(".letter").click(function() {
+        if ($(this).text() !== "Go" && $(this).text() !== "C") {
+
+          if ($('#numero').val().length < 6) {
+            $('#numero').val($('#numero').val() + $(this).text());
+          } else {
+
+            alert("El pin puede ser de maximo 6 digitos")
+          }
+
+        }
+
+
+      });
+
+
+      $("#clear").click(function() {
+        $('#numero').val("")
+
+      });
+
+      $("#go").click(function() {
+
+        if ($('#numero').val().length === 6) {
+          $('#alltext').val("")
+          numeros = $('#numero').val().split("")
+          var instrucciones = []
+          var arrayLength = numeros.length;
+          for (var i = 0; i < arrayLength; i++) {
+            switch (parseInt(numeros[i])) {
+              case 0:
+                instrucciones.push("DRAG 3 0")
+                break;
+              case 1:
+                instrucciones.push("DRAG 2 0")
+                break;
+              case 2:
+                instrucciones.push("DRAG 2 1")
+                break;
+              case 3:
+                instrucciones.push("DRAG 2 2")
+                break;
+              case 4:
+                instrucciones.push("DRAG 1 0")
+                break;
+              case 5:
+                instrucciones.push("DRAG 1 1")
+                break;
+              case 6:
+                instrucciones.push("DRAG 1 2")
+                break;
+              case 7:
+                instrucciones.push("DRAG 0 0")
+                break;
+              case 8:
+                instrucciones.push("DRAG 0 1")
+                break;
+              case 9:
+                instrucciones.push("DRAG 0 2")
+                break;
+
+            }
+
+            //Do something
+            instrucciones.push("TOUCH")
+          }
+          instrucciones.push("DRAG 3 2")
+          instrucciones.push("TOUCH")
+          instrucciones.push("DRAG 0 0")
+          console.log(instrucciones);
+          var arrLength = instrucciones.length;
+          for (var i = 0; i < arrLength; i++) {
+            console.log(instrucciones[i]);
+              $('#alltext').val(  $('#alltext').val() + instrucciones[i] + "\n");
+
+          }
+
+
+        } else {
+
+          alert("Pin incompleto")
+        }
+
+      });
+    });
+  </script>
+
+</head>
+
+<body>
+  <div class="row" style="text-align:center;">
+    <div class="col-md-12">
+      <h4>Este módulo traductor para Robotic Finger </h4>
+
+    </div>
+
+
+  </div>
+  <div class="row">
+    <div class="col-md-4" style="background:rgba(0,0,0,0.1);height: 100%;padding:40px;">
+
+      <h3>Últimas instrucciones</h3>
+      <textarea id="alltext"></textarea>
+    </div>
+    <div class="col-md-4">
+
+      <div id="container">
+        <h4>Codigo:</h4>
+        <h4><input id="numero" min="6" max="6"></h4>
+        <ul id="keyboard">
+
+          <li class="letter clearl">7</li>
+          <li class="letter ">8</li>
+          <li class="letter">9</li>
+
+          <li class="letter clearl">4</li>
+          <li class="letter">5</li>
+          <li class="letter">6</li>
+
+          <li class="letter clearl">1</li>
+          <li class="letter">2</li>
+          <li class="letter">3</li>
+
+
+          <li class="letter clearl">0</li>
+          <li class="letter" id="clear">C</li>
+          <li class="letter" id="go">Go</li>
+
+        </ul>
+      </div>
+
+
+
+
+    </div>
+    <div class="col-md-4" style="background:rgba(0,0,0,0.1);height: 100%;padding:40px;">
+
+      <h3>Mensajes Recibidos</h3>
+
+    </div>
+  </div>
+
+
+
+</body>
+
+</html>

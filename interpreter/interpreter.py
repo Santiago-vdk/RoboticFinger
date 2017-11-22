@@ -112,9 +112,9 @@ def calcular_trayectoria(path):
                 if(tamanio == 0):
                     instruccion = (1,1,230)
                 elif(tamanio == 1):
-                    instruccion = (1,1,210)
+                    instruccion = (1,1,280)
                 else:
-                    instruccion = (1,1,210)
+                    instruccion = (1,1,320)
                 camino.append(instruccion)
                 k += 1
                 j += 1
@@ -126,9 +126,9 @@ def calcular_trayectoria(path):
                 if(tamanio == 0):
                     instruccion = (1,0,230)
                 elif(tamanio == 1):
-                    instruccion = (1,0,210)
+                    instruccion = (1,0,280)
                 else:
-                    instruccion = (1,0,210)
+                    instruccion = (1,0,320)
                 camino.append(instruccion)
                 k += 1
                 j -= 1
@@ -140,9 +140,9 @@ def calcular_trayectoria(path):
                 if(tamanio == 0):
                     instruccion = (0,1,230)
                 elif(tamanio == 1):
-                    instruccion = (0,1,210)
+                    instruccion = (0,1,280)
                 else:
-                    instruccion = (0,1,210)
+                    instruccion = (0,1,270)
                 camino.append(instruccion)
                 k += 1
                 i += 1
@@ -154,9 +154,9 @@ def calcular_trayectoria(path):
                 if(tamanio == 0):
                     instruccion = (0,0,230)
                 elif(tamanio == 1):
-                    instruccion = (0,0,210)
+                    instruccion = (0,0,280)
                 else:
-                    instruccion = (0,0,210)
+                    instruccion = (0,0,270)
 
                 camino.append(instruccion)
                 k += 1
@@ -294,7 +294,7 @@ def main(argv):
                         pos_actual[0] = int(command[1])
                         pos_actual[1] = int(command[2])
                         for instruccion in instrucciones:                   # Arreglo de tuplas, cada tupla tiene (X|Y,IZQ|DER,STEPS)
-                            print(instruccion)
+                            #print(instruccion)
                             if(ctypes.CDLL(root_path + '/library/lib.so').drag(instruccion[0],instruccion[1],instruccion[2]) < 0):
                                 print("Error ejecutando instruccion DRAG")
                                 sys.exit()
