@@ -299,28 +299,31 @@ def main(argv):
                                 print("Error ejecutando instruccion DRAG")
                                 sys.exit()
                                 #pass
+                            time.sleep(1)
                         print("")
 
                     else:
                         print("DRAG IGNORADO")
 
                 elif(command[0] == "PUSH"):
-                    print("Ejecutando PUSH")
-                    if(ctypes.CDLL(root_path + '/library/lib.so').push(command[1]) < 0):
+                    print("Ejecutando PUSH " + str(command[1]))
+                    if(ctypes.CDLL(root_path + '/library/lib.so').push(int(command[1])) < 0):
                         print("Error ejecutando instruccion DRAG")
                         sys.exit()
                     print("")
+                    time.sleep(int(command[1]))
                 elif(command[0] == "TOUCH"):
                     print("Ejecutando TOUCH")
                     if(ctypes.CDLL(root_path + '/library/lib.so').touch() < 0):
                         print("Error ejecutando instruccion DRAG")
                         sys.exit()
                     print("")
+                    time.sleep(1)
                 else:
                     print("Error inesperado detectando instrucciones!")
                     sys.exit()
                     pass
-                time.sleep(1)
+
 
 
 if __name__ == '__main__':
