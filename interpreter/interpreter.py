@@ -243,7 +243,6 @@ def main(argv):
         if(ctypes.CDLL(root_path + '/library/lib.so').touch() < 0):
             print("Error ejecutando instruccion DRAG")
             sys.exit()
-
     else:
         if len(argv) < 3:
             print(bcolors.FAIL + "Favor especificar archivo de configuracion y un tamaño SMALL | MEDIUM | LARGE" + bcolors.ENDC)
@@ -285,12 +284,16 @@ def main(argv):
             for line in fp:
                 line = line.rstrip()        # Removemos el \n del archivo
                 command = line.split(' ')       # Se separa cada instruccion para procesarse
-
+                #print(len(command[0]))
                 if(command[0] == "DRAG"):       # Instruccion DRAG
                     print("Ejecutando DRAG")
 
-                    desde = teclado[ pos_actual[0] ][ pos_actual[1] ]   # Direccion desde la que estamos partiendo
-                    hasta = teclado[ int(command[1]) ][ int(command[2]) ]   # Direccion a la que deseamos llegar
+                    try:
+                        desde = teclado[ pos_actual[0] ][ pos_actual[1] ]   # Direccion desde la que estamos partiendo
+                        hasta = teclado[ int(command[1]) ][ int(command[2]) ]   # Direccion a la que deseamos llegar
+                    except:
+                        print("Error, los rangos de movimiento son invalidos!")
+                        sys.exit()
                     print("Desde " + str(desde) + ", Hasta " + str(hasta))
                     if(desde != hasta):                                        # En caso de ya estar en la direccion desda IGNORAR
 
@@ -328,6 +331,11 @@ def main(argv):
                         sys.exit()
                     print("")
                     time.sleep(1)
+                elif(len(command[0]) == 0 ):
+                    # Espacio en blanco
+                    print("Ignorando espacio en blanco")
+                    print("")
+                    pass
                 else:
                     print("Error inesperado detectando instrucciones!")
                     sys.exit()
