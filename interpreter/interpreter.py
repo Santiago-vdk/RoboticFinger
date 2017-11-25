@@ -15,6 +15,8 @@ from antlr4.error.ErrorListener import ErrorListener
 
 distancia = 0
 
+# Listener para errores de sintaxis
+# Referencia [30]
 class MyErrorListener( ErrorListener ):
     def syntaxError(self, recognizer, offendingSymbol, line, column, msg, e):
        	print(msg + " line: " + str(line) + " column: " + str(column))
@@ -22,7 +24,8 @@ class MyErrorListener( ErrorListener ):
         sys.exit()
 
 
-
+# Metodo para calculo de dijkstra
+# Referencias [35] y [36] en documentacion
 def dijkstra(graph,src,dest,visited=[],distances={},predecessors={}):
 
     """ calculates a shortest path tree routed in src
@@ -74,11 +77,13 @@ def dijkstra(graph,src,dest,visited=[],distances={},predecessors={}):
         return dijkstra(graph, x, dest, visited, distances, predecessors)
 
 
-teclado =  [[7,8,9],    # Se utiliza para manejar el posicionamiento global del dedo
+# Matriz encargada de resolver las direcciones que debe tomar el dedo
+teclado =  [[7,8,9],
             [4,5,6],
             [1,2,3],
             [0,-1,10]]
 
+# Grafo para calculo del recorrido
 graph = {'7': {'8': 1, '4': 1},
          '8': {'7': 1, '5': 1, '9':1},
          '9': {'8': 1, '6':1,},
@@ -97,6 +102,7 @@ global tamanio
 tamanio = -1            # Tamaño del teclado a manejar
 #print("----------------------------------------")
 
+# Funcion encargada de traducir el camino mas corto en direcciones/instrucciones
 def calcular_trayectoria(path):
     global tamanio
     i = pos_actual[0]
@@ -170,6 +176,7 @@ def calcular_trayectoria(path):
 
 pos_actual = [0,0]
 
+# Validacion para la seleccion d un teclado
 def seleccionar_teclado(pTamanio):
     global tamanio
     if(pTamanio == "SMALL"):
@@ -197,6 +204,7 @@ class bcolors:
 
 def main(argv):
 
+    # Llamado para el ajuste de la maquina
     if(argv[1] == "calibrar"):
         print("Iniciando calibrado, verifique el estado inicial de la maquina...")
 
@@ -228,6 +236,7 @@ def main(argv):
         if(ctypes.CDLL(root_path + '/library/lib.so').drag(1,0,900) < 0):
             print("Error ejecutando instruccion DRAG")
             sys.exit()
+    # Llamado para el ajuste de la posicion inicial
     elif(argv[1] == "touch"):
         print("Bajando dedo...")
 

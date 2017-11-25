@@ -6,8 +6,8 @@
 *
 * PUBLIC FUNCTIONS :
 *       int	drag	(int motor, int direccion, int steps)
-*	int	drop	(int tiempo)
-*
+*	      int	push	(int tiempo)
+*				int touch()
 * NOTES :
 *
 *
@@ -48,7 +48,7 @@ int drag(int motor, int direccion, int steps){
 		if(motor==0){
 			if(direccion == 0) {
 				fprintf(device,  "000_%d\n", steps);
-				
+
 				fclose(device);
 				return 0;
 			}
@@ -110,7 +110,7 @@ int drag(int motor, int direccion, int steps){
 
   int main(){
 
-
+// Lamadas de prueba
 	drag(1, 0, 210);
 touch();
 	drag(0, 0, 210);

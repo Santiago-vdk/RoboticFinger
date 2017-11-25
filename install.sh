@@ -1,4 +1,4 @@
-echo "Conecte su dispositivo ARDUINO UNO antes de continuar!"
+echo "Conecte su dispositivo ARDUINO MEGA y posterirmente su dispositivo ARDUINO UNO antes de continuar!"
 echo -n "Presione [ENTER] para continuar...: "
 read var_name
 echo "Desmontando modulo CDC_ACM"

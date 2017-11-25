@@ -13,6 +13,16 @@
  at /dev. User space application can use system calls (open, read, write ) on this device.
  use sudo chmod 777 /dev/pic18f for any user (other than root) to call open,read and write on the device.
 
+
+ Este codigo proviene de la clase paga de Udemy Education
+ llamado "Linux Kernel Driver Programming with Embedded Devices"
+ https://www.udemy.com/linux-kernel-driver-programming-with-embedded-devices/
+ se decide no hacer cambios en las variables para mantener el
+ origen del codigo asi como su proposito inicial, podemos asegurar
+ que el codigo ha sido modificado ya que soporta la comunicacion con
+ un dispositivo Arduino y no un PIC. Ambos se diferencian debido a su
+ forma de comunicarse Bulks y Characters
+
 */
 
 
